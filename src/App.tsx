@@ -12,9 +12,10 @@ import { TransportAnalysis } from "./components/TransportAnalysis";
 import { PolicyAnalysis } from "./components/PolicyAnalysis";
 import { SiteRecommendations } from "./components/SiteRecommendations";
 import { ScenarioPlanning } from "./components/ScenarioPlanning";
+import { InvestmentCalculator } from "./components/InvestmentCalculator";
 import { Toaster } from "sonner";
 
-type TabType = 'dashboard' | 'map' | 'assets' | 'demand' | 'renewable' | 'transport' | 'policy' | 'recommendations' | 'scenarios';
+type TabType = 'dashboard' | 'map' | 'assets' | 'demand' | 'renewable' | 'transport' | 'policy' | 'recommendations' | 'scenarios' | 'investment';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
@@ -64,6 +65,7 @@ export default function App() {
                   { id: 'policy', label: 'Policy Analysis', icon: '📋' },
                   { id: 'recommendations', label: 'Site Recommendations', icon: '🎯' },
                   { id: 'scenarios', label: 'Scenario Planning', icon: '🔮' },
+                  { id: 'investment', label: 'Investment Calculator', icon: '💰' },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -97,6 +99,7 @@ export default function App() {
             {activeTab === 'policy' && <PolicyAnalysis />}
             {activeTab === 'recommendations' && <SiteRecommendations />}
             {activeTab === 'scenarios' && <ScenarioPlanning />}
+            {activeTab === 'investment' && <InvestmentCalculator />}
           </div>
         </div>
       </Authenticated>
