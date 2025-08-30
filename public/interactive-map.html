@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Large-Scale Hydrogen Infrastructure Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<style>
+  body, html { margin:0; padding:0; height:100%; }
+  #map { height:100vh; width:100%; }
+  .leaflet-popup-content { font-size:14px; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+// Initialize map
+const map = L.map('map').setView([22, 78], 5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  attribution:'&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// ---------------- States & Centers ----------------
+const states = {
+  "Karnataka":[12.97,77.59],
+  "Maharashtra":[18.65,73.85],
+  "Tamil Nadu":[11.0,78.9],
+  "Gujarat":[22.3,72.6],
+  "West Bengal":[22.6,88.36]
+};
+
+// ---------------- Utility: Generate realistic points ----------------
+function generatePoint(lat,lng,minDistKm){
+  const earthRadius = 6371; // km
+  let latNew,lngNew,dist;
+  do{
+    const randLat = lat + (Math.random()-0.5)*0.3; // smaller range for realism
+    const randLng = lng + (Math.random()-0.5)*0.3;
+    latNew = randLat;
+    lngNew = randLng;
+    dist = Math.sqrt(Math.pow((lat-latNew)*111,2)+Math.pow((lng-lngNew)*111*Math.cos(lat*Math.PI/180),2));
+  } while(dist<minDistKm);
+  return [latNew,lngNew];
+}
+
+// ---------------- Generate infrastructure ----------------
+const plants = [];
+const hubs = [];
+const storageHubs = [];
+const pipelines = [];
+
+for(const state in states){
+  const center = states[state];
+
+  // Hydrogen plants (10–20 km apart)
+  const plant1 = generatePoint(center[0],center[1],10);
+  const plant2 = generatePoint(center[0],center[1],10);
+  plants.push({coords:plant1,name:`${state} Plant 1`,capacity:"150–200 MW"});
+  plants.push({coords:plant2,name:`${state} Plant 2`,capacity:"150–200 MW"});
+
+  // Power hubs (2–5 km from plants, can be near water)
+  const hub1 = generatePoint(center[0],center[1],2);
+  const hub2 = generatePoint(center[0],center[1],2);
+  hubs.push({coords:hub1,name:`${state} Hub 1`,output:"500 MW"});
+  hubs.push({coords:hub2,name:`${state} Hub 2`,output:"500 MW"});
+
+  // Storage hubs (5–10 km from plants)
+  const storage = generatePoint(center[0],center[1],5);
+  storageHubs.push({coords:storage,name:`${state} Storage 1`,capacity:"200 MW"});
+
+  // Pipelines: plant → hub & plant → storage
+  pipelines.push({coords:[plant1,hub1],name:`${state} Pipeline 1`});
+  pipelines.push({coords:[plant2,hub2],name:`${state} Pipeline 2`});
+  pipelines.push({coords:[plant1,storage],name:`${state} Pipeline 3`});
+  pipelines.push({coords:[plant2,storage],name:`${state} Pipeline 4`});
+}
+
+// ---------------- Layers ----------------
+const plantLayer = L.layerGroup(plants.map(p=>
+  L.circleMarker(p.coords,{radius:8,fillColor:"green",color:"white",weight:2,fillOpacity:0.9})
+    .bindPopup(`<b>${p.name}</b><br/>Capacity: ${p.capacity}`)
+));
+
+const hubLayer = L.layerGroup(hubs.map(h=>
+  L.circleMarker(h.coords,{radius:10,fillColor:"orange",color:"black",weight:2,fillOpacity:0.9})
+    .bindPopup(`<b>${h.name}</b><br/>Output: ${h.output}`)
+));
+
+const storageLayer = L.layerGroup(storageHubs.map(s=>
+  L.circleMarker(s.coords,{radius:8,fillColor:"blue",color:"white",weight:2,fillOpacity:0.8})
+    .bindPopup(`<b>${s.name}</b><br/>Capacity: ${s.capacity}`)
+));
+
+const pipelineLayer = L.layerGroup(pipelines.map(pl=>
+  L.polyline(pl.coords,{color:"red",weight:3,dashArray:"5,5"})
+    .bindPopup(`<b>${pl.name}</b>`)
+));
+
+// Add layers to map
+plantLayer.addTo(map);
+hubLayer.addTo(map);
+storageLayer.addTo(map);
+pipelineLayer.addTo(map);
+
+// Layer toggle control
+L.control.layers(null,{
+  "Hydrogen Plants": plantLayer,
+  "Power Hubs": hubLayer,
+  "Storage Hubs": storageLayer,
+  "Pipelines": pipelineLayer
+}).addTo(map);
+
+</script>
+</body>
+</html>
