@@ -57,7 +57,7 @@ export function Dashboard() {
   // If showing site recommendations, render that component instead
   if (showSiteRecommendations) {
     return (
-      <div className="p-6">
+      <div className="p-6 bg-gradient-to-r from-[#345e01] via-[#228B22] to-[#0b3d08]">
         <div className="mb-6">
           <button
             onClick={() => setShowSiteRecommendations(false)}
@@ -75,7 +75,7 @@ export function Dashboard() {
   // If showing scenario planning, render that component instead
   if (showScenarioPlanning) {
     return (
-      <div className="p-6">
+      <div className="p-6 bg-gradient-to-r from-[#5fa708] via-[#228B22] to-[#0a5406]">
         <div className="mb-6">
           <button
             onClick={() => setShowScenarioPlanning(false)}
@@ -93,7 +93,7 @@ export function Dashboard() {
   // If showing demand analysis, render that component instead
   if (showDemandAnalysis) {
     return (
-      <div className="p-6">
+      <div className="p-6 bg-gradient-to-r from-[#5fa708] via-[#228B22] to-[#0b3d08]">
         <div className="mb-6">
           <button
             onClick={() => setShowDemandAnalysis(false)}
@@ -109,12 +109,12 @@ export function Dashboard() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-gradient-to-r from-[#5fa708] via-[#228B22] to-[#0b3d08]">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900">
-          Welcome back, {user?.name || 'User'}! 👋
+          Welcome back, {user?.name || user?.email?.split("@")[0]}! 👋
         </h1>
-        <p className="text-gray-600 mt-2">
+        <p className="text-white mt-2">
           Here's an overview of India's hydrogen infrastructure landscape
         </p>
       </div>

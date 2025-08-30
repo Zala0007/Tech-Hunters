@@ -1,64 +1,63 @@
 "use client";
+import { useAuthActions } from "@convex-dev/auth/react";
 import { useState } from "react";
 import { toast } from "sonner";
-import api from "./apiClient";
 
 export function SignInForm() {
+  const { signIn } = useAuthActions();
   const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
   const [submitting, setSubmitting] = useState(false);
 
   return (
-    <div className="w-full max-w-md mx-auto px-4 sm:px-6">
+    <div className="w-full">
       <form
-        className="flex flex-col gap-4 sm:gap-5"
-          onSubmit={async (e) => {
+        className="flex flex-col gap-form-field"
+        onSubmit={(e) => {
           e.preventDefault();
           setSubmitting(true);
-          const form = e.target as HTMLFormElement;
-          const formData = Object.fromEntries(new FormData(form) as any);
-          try {
-            if (flow === 'signUp') {
-              await api.auth.signup(formData);
+          const formData = new FormData(e.target as HTMLFormElement);
+          formData.set("flow", flow);
+          void signIn("password", formData).catch((error) => {
+            let toastTitle = "";
+            if (error.message.includes("Invalid password")) {
+              toastTitle = "Invalid password. Please try again.";
             } else {
-              await api.auth.signin(formData);
+              toastTitle =
+                flow === "signIn"
+                  ? "Could not sign in, did you mean to sign up?"
+                  : "Could not sign up, did you mean to sign in?";
             }
-            toast.success('Signed in');
+            toast.error(toastTitle);
             setSubmitting(false);
-            window.location.reload();
-          } catch (err: any) {
-            toast.error(err?.message || 'Sign in failed');
-            setSubmitting(false);
-          }
+          });
         }}
       >
         <input
-          className="auth-input-field text-sm sm:text-base"
+          className="auth-input-field"
           type="email"
           name="email"
           placeholder="Email"
           required
         />
         <input
-          className="auth-input-field text-sm sm:text-base"
+          className="auth-input-field"
           type="password"
           name="password"
           placeholder="Password"
           required
         />
-        <button 
-          className="auth-button w-full sm:w-auto sm:min-w-[200px] md:w-full" 
-          type="submit" 
-          disabled={submitting}
-        >
+        <button className="auth-button" type="submit" disabled={submitting}>
           {flow === "signIn" ? "Sign in" : "Sign up"}
         </button>
-        <div className="text-center text-sm sm:text-base text-secondary">
+        <div className="text-center text-sm text-secondary text-white">
           <span>
-            {flow === "signIn" ? "Don't have an account? " : "Already have an account? "}
+            {flow === "signIn"
+              ? "Don't have an account? "
+              : "Already have an account? "}
           </span>
           <button
             type="button"
-            className="text-primary hover:text-primary-hover hover:underline font-medium cursor-pointer text-sm sm:text-base transition-colors"
+            className="text-primary hover:text-primary-hover hover:underline font-medium cursor-pointer"
             onClick={() => setFlow(flow === "signIn" ? "signUp" : "signIn")}
           >
             {flow === "signIn" ? "Sign up instead" : "Sign in instead"}
@@ -70,14 +69,9 @@ export function SignInForm() {
         <span className="mx-4 text-secondary">or</span>
         <hr className="my-4 grow border-gray-200" />
       </div>
-      <button
-        className="auth-button w-full sm:w-auto sm:min-w-[200px] md:w-full"
-        onClick={async () => {
-          try { await api.auth.signin({ anonymous: true }); window.location.reload(); } catch { }
-        }}
-      >
+      <button className="auth-button" onClick={() => void signIn("anonymous")}>
         Sign in anonymously
       </button>
-    </div>
-  );
+    </div>
+  );
 }

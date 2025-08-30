@@ -53,6 +53,13 @@ const dummyAssets = [
 ];
 
 export function AssetManager() {
+  // Share dashboard handler (top-level)
+  const handleShareDashboard = () => {
+    // Simulate shareable link generation
+    const shareUrl = window.location.href + (selectedAsset ? `?asset=${selectedAsset._id}` : "");
+    navigator.clipboard.writeText(shareUrl);
+    toast.success("🔗 Dashboard link copied to clipboard!");
+  };
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("");
@@ -91,7 +98,14 @@ export function AssetManager() {
   };
 
   const handleGenerateReport = () => {
-    toast.success("📋 Generating comprehensive asset report...");
+    const handleShareDashboard = () => {
+      // Simulate shareable link generation
+      const shareUrl = window.location.href + `?asset=${selectedAsset?._id}`;
+      navigator.clipboard.writeText(shareUrl);
+      toast.success("🔗 Dashboard link copied to clipboard!");
+    };
+
+      toast.success("� Generating comprehensive asset report...");
     
     // Create Excel-like data structure
     const reportData = {
@@ -240,7 +254,7 @@ export function AssetManager() {
   // If analytics view is selected, show analytics dashboard
   if (showAnalytics && selectedAsset) {
     return (
-      <div className="p-6">
+      <div className="p-6 bg-gradient-to-r from-[#5fa708] via-[#228B22] to-[#0b3d08]">
         <div className="mb-6 flex justify-between items-center">
           <button
             onClick={() => setShowAnalytics(false)}
@@ -676,7 +690,10 @@ export function AssetManager() {
               <button className="flex items-center justify-center px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors">
                 📈 Export Charts
               </button>
-              <button className="flex items-center justify-center px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors">
+              <button 
+                onClick={handleShareDashboard}
+                className="flex items-center justify-center px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors"
+              >
                 📋 Share Dashboard
               </button>
             </div>
@@ -689,7 +706,7 @@ export function AssetManager() {
   // If an asset is selected, show detailed view
   if (selectedAsset) {
     return (
-      <div className="p-6">
+      <div className="p-6 bg-gradient-to-r from-[#5fa708] via-[#228B22] to-[#0b3d08]">
         <div className="mb-6">
           <button
             onClick={handleBackToList}
@@ -889,7 +906,7 @@ export function AssetManager() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-gradient-to-r from-[#5fa708] via-[#228B22] to-[#0b3d08]">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Hydrogen Asset Manager</h2>
         <button

@@ -7,11 +7,505 @@ export function DemandAnalysis() {
   const [selectedState, setSelectedState] = useState<string>("");
   const [selectedPriority, setSelectedPriority] = useState<string>("");
 
-  const demandClusters = useQuery(api.demandClusters.getDemandClusters, {
+
+  // Dummy dataset of 40 clusters
+  const dummyClusters = [
+    {
+      _id: "1",
+      name: "Mumbai Industrial Cluster",
+      location: { district: "Mumbai", state: "Maharashtra" },
+      type: "industrial",
+      priority: "high",
+      currentDemand: 12000,
+      projectedDemand2030: 18000,
+      projectedDemand2050: 25000,
+      industries: ["Petrochemicals", "Automotive"],
+      transportConnectivity: 95
+    },
+    {
+      _id: "2",
+      name: "Delhi Transport Hub",
+      location: { district: "Delhi", state: "Delhi" },
+      type: "transport",
+      priority: "high",
+      currentDemand: 9000,
+      projectedDemand2030: 14000,
+      projectedDemand2050: 20000,
+      industries: ["Logistics", "Metro"],
+      transportConnectivity: 98
+    },
+    {
+      _id: "3",
+      name: "Bangalore Tech Park",
+      location: { district: "Bangalore", state: "Karnataka" },
+      type: "industrial",
+      priority: "medium",
+      currentDemand: 8000,
+      projectedDemand2030: 12000,
+      projectedDemand2050: 17000,
+      industries: ["IT", "Electronics"],
+      transportConnectivity: 90
+    },
+    {
+      _id: "4",
+      name: "Chennai Port Cluster",
+      location: { district: "Chennai", state: "Tamil Nadu" },
+      type: "export",
+      priority: "high",
+      currentDemand: 7000,
+      projectedDemand2030: 11000,
+      projectedDemand2050: 16000,
+      industries: ["Shipping", "Automotive"],
+      transportConnectivity: 92
+    },
+    {
+      _id: "5",
+      name: "Hyderabad Residential Zone",
+      location: { district: "Hyderabad", state: "Telangana" },
+      type: "residential",
+      priority: "medium",
+      currentDemand: 5000,
+      projectedDemand2030: 8000,
+      projectedDemand2050: 12000,
+      industries: ["Housing"],
+      transportConnectivity: 85
+    },
+    {
+      _id: "6",
+      name: "Ahmedabad Industrial Estate",
+      location: { district: "Ahmedabad", state: "Gujarat" },
+      type: "industrial",
+      priority: "high",
+      currentDemand: 10000,
+      projectedDemand2030: 15000,
+      projectedDemand2050: 21000,
+      industries: ["Textiles", "Pharma"],
+      transportConnectivity: 88
+    },
+    {
+      _id: "7",
+      name: "Kolkata Export Terminal",
+      location: { district: "Kolkata", state: "West Bengal" },
+      type: "export",
+      priority: "medium",
+      currentDemand: 6000,
+      projectedDemand2030: 9000,
+      projectedDemand2050: 13000,
+      industries: ["Shipping", "Tea"],
+      transportConnectivity: 80
+    },
+    {
+      _id: "8",
+      name: "Pune Residential Area",
+      location: { district: "Pune", state: "Maharashtra" },
+      type: "residential",
+      priority: "low",
+      currentDemand: 4000,
+      projectedDemand2030: 6000,
+      projectedDemand2050: 9000,
+      industries: ["Housing"],
+      transportConnectivity: 75
+    },
+    {
+      _id: "9",
+      name: "Surat Textile Cluster",
+      location: { district: "Surat", state: "Gujarat" },
+      type: "industrial",
+      priority: "medium",
+      currentDemand: 7000,
+      projectedDemand2030: 10000,
+      projectedDemand2050: 14000,
+      industries: ["Textiles"],
+      transportConnectivity: 82
+    },
+    {
+      _id: "10",
+      name: "Jaipur Transport Node",
+      location: { district: "Jaipur", state: "Rajasthan" },
+      type: "transport",
+      priority: "medium",
+      currentDemand: 5000,
+      projectedDemand2030: 8000,
+      projectedDemand2050: 12000,
+      industries: ["Metro", "Logistics"],
+      transportConnectivity: 78
+    },
+    {
+      _id: "11",
+      name: "Lucknow Residential Sector",
+      location: { district: "Lucknow", state: "Uttar Pradesh" },
+      type: "residential",
+      priority: "low",
+      currentDemand: 3500,
+      projectedDemand2030: 5000,
+      projectedDemand2050: 7000,
+      industries: ["Housing"],
+      transportConnectivity: 70
+    },
+    {
+      _id: "12",
+      name: "Indore Industrial Park",
+      location: { district: "Indore", state: "Madhya Pradesh" },
+      type: "industrial",
+      priority: "high",
+      currentDemand: 9000,
+      projectedDemand2030: 13000,
+      projectedDemand2050: 18000,
+      industries: ["Automotive", "Textiles"],
+      transportConnectivity: 86
+    },
+    {
+      _id: "13",
+      name: "Bhopal Export Hub",
+      location: { district: "Bhopal", state: "Madhya Pradesh" },
+      type: "export",
+      priority: "medium",
+      currentDemand: 4000,
+      projectedDemand2030: 7000,
+      projectedDemand2050: 10000,
+      industries: ["Agriculture"],
+      transportConnectivity: 77
+    },
+    {
+      _id: "14",
+      name: "Nagpur Transport Center",
+      location: { district: "Nagpur", state: "Maharashtra" },
+      type: "transport",
+      priority: "high",
+      currentDemand: 6000,
+      projectedDemand2030: 9000,
+      projectedDemand2050: 13000,
+      industries: ["Logistics"],
+      transportConnectivity: 89
+    },
+    {
+      _id: "15",
+      name: "Visakhapatnam Industrial Zone",
+      location: { district: "Visakhapatnam", state: "Andhra Pradesh" },
+      type: "industrial",
+      priority: "medium",
+      currentDemand: 8000,
+      projectedDemand2030: 12000,
+      projectedDemand2050: 17000,
+      industries: ["Steel", "Shipping"],
+      transportConnectivity: 84
+    },
+    {
+      _id: "16",
+      name: "Vijayawada Residential Area",
+      location: { district: "Vijayawada", state: "Andhra Pradesh" },
+      type: "residential",
+      priority: "low",
+      currentDemand: 3000,
+      projectedDemand2030: 5000,
+      projectedDemand2050: 8000,
+      industries: ["Housing"],
+      transportConnectivity: 68
+    },
+    {
+      _id: "17",
+      name: "Goa Export Cluster",
+      location: { district: "Panaji", state: "Goa" },
+      type: "export",
+      priority: "medium",
+      currentDemand: 3500,
+      projectedDemand2030: 6000,
+      projectedDemand2050: 9000,
+      industries: ["Tourism", "Shipping"],
+      transportConnectivity: 76
+    },
+    {
+      _id: "18",
+      name: "Chandigarh Residential Block",
+      location: { district: "Chandigarh", state: "Punjab" },
+      type: "residential",
+      priority: "low",
+      currentDemand: 2500,
+      projectedDemand2030: 4000,
+      projectedDemand2050: 6000,
+      industries: ["Housing"],
+      transportConnectivity: 65
+    },
+    {
+      _id: "19",
+      name: "Shimla Transport Node",
+      location: { district: "Shimla", state: "Himachal Pradesh" },
+      type: "transport",
+      priority: "medium",
+      currentDemand: 2000,
+      projectedDemand2030: 3500,
+      projectedDemand2050: 5000,
+      industries: ["Tourism"],
+      transportConnectivity: 60
+    },
+    {
+      _id: "20",
+      name: "Guwahati Industrial Estate",
+      location: { district: "Guwahati", state: "Assam" },
+      type: "industrial",
+      priority: "high",
+      currentDemand: 7000,
+      projectedDemand2030: 11000,
+      projectedDemand2050: 15000,
+      industries: ["Tea", "Petrochemicals"],
+      transportConnectivity: 83
+    },
+    {
+      _id: "21",
+      name: "Patna Export Terminal",
+      location: { district: "Patna", state: "Bihar" },
+      type: "export",
+      priority: "medium",
+      currentDemand: 3000,
+      projectedDemand2030: 5000,
+      projectedDemand2050: 8000,
+      industries: ["Agriculture"],
+      transportConnectivity: 72
+    },
+    {
+      _id: "22",
+      name: "Raipur Industrial Park",
+      location: { district: "Raipur", state: "Chhattisgarh" },
+      type: "industrial",
+      priority: "high",
+      currentDemand: 6000,
+      projectedDemand2030: 9000,
+      projectedDemand2050: 13000,
+      industries: ["Steel", "Mining"],
+      transportConnectivity: 81
+    },
+    {
+      _id: "23",
+      name: "Ranchi Residential Area",
+      location: { district: "Ranchi", state: "Jharkhand" },
+      type: "residential",
+      priority: "low",
+      currentDemand: 2000,
+      projectedDemand2030: 3500,
+      projectedDemand2050: 5000,
+      industries: ["Housing"],
+      transportConnectivity: 62
+    },
+    {
+      _id: "24",
+      name: "Bhubaneswar Export Hub",
+      location: { district: "Bhubaneswar", state: "Odisha" },
+      type: "export",
+      priority: "medium",
+      currentDemand: 4000,
+      projectedDemand2030: 7000,
+      projectedDemand2050: 10000,
+      industries: ["Agriculture", "Shipping"],
+      transportConnectivity: 74
+    },
+    {
+      _id: "25",
+      name: "Amritsar Industrial Estate",
+      location: { district: "Amritsar", state: "Punjab" },
+      type: "industrial",
+      priority: "high",
+      currentDemand: 5000,
+      projectedDemand2030: 8000,
+      projectedDemand2050: 12000,
+      industries: ["Textiles", "Food Processing"],
+      transportConnectivity: 79
+    },
+    {
+      _id: "26",
+      name: "Siliguri Transport Node",
+      location: { district: "Siliguri", state: "West Bengal" },
+      type: "transport",
+      priority: "medium",
+      currentDemand: 2500,
+      projectedDemand2030: 4000,
+      projectedDemand2050: 6000,
+      industries: ["Logistics"],
+      transportConnectivity: 66
+    },
+    {
+      _id: "27",
+      name: "Dehradun Residential Block",
+      location: { district: "Dehradun", state: "Uttarakhand" },
+      type: "residential",
+      priority: "low",
+      currentDemand: 1500,
+      projectedDemand2030: 2500,
+      projectedDemand2050: 4000,
+      industries: ["Housing"],
+      transportConnectivity: 55
+    },
+    {
+      _id: "28",
+      name: "Srinagar Export Cluster",
+      location: { district: "Srinagar", state: "Jammu & Kashmir" },
+      type: "export",
+      priority: "medium",
+      currentDemand: 2000,
+      projectedDemand2030: 3500,
+      projectedDemand2050: 5000,
+      industries: ["Handicrafts", "Tourism"],
+      transportConnectivity: 58
+    },
+    {
+      _id: "29",
+      name: "Agra Industrial Estate",
+      location: { district: "Agra", state: "Uttar Pradesh" },
+      type: "industrial",
+      priority: "high",
+      currentDemand: 4000,
+      projectedDemand2030: 7000,
+      projectedDemand2050: 10000,
+      industries: ["Leather", "Tourism"],
+      transportConnectivity: 73
+    },
+    {
+      _id: "30",
+      name: "Varanasi Transport Node",
+      location: { district: "Varanasi", state: "Uttar Pradesh" },
+      type: "transport",
+      priority: "medium",
+      currentDemand: 3000,
+      projectedDemand2030: 5000,
+      projectedDemand2050: 8000,
+      industries: ["Tourism", "Logistics"],
+      transportConnectivity: 67
+    },
+    {
+      _id: "31",
+      name: "Coimbatore Industrial Park",
+      location: { district: "Coimbatore", state: "Tamil Nadu" },
+      type: "industrial",
+      priority: "high",
+      currentDemand: 6000,
+      projectedDemand2030: 9000,
+      projectedDemand2050: 13000,
+      industries: ["Textiles", "Engineering"],
+      transportConnectivity: 80
+    },
+    {
+      _id: "32",
+      name: "Madurai Residential Area",
+      location: { district: "Madurai", state: "Tamil Nadu" },
+      type: "residential",
+      priority: "low",
+      currentDemand: 2000,
+      projectedDemand2030: 3500,
+      projectedDemand2050: 5000,
+      industries: ["Housing"],
+      transportConnectivity: 60
+    },
+    {
+      _id: "33",
+      name: "Thiruvananthapuram Export Hub",
+      location: { district: "Thiruvananthapuram", state: "Kerala" },
+      type: "export",
+      priority: "medium",
+      currentDemand: 3000,
+      projectedDemand2030: 5000,
+      projectedDemand2050: 8000,
+      industries: ["Shipping", "Tourism"],
+      transportConnectivity: 70
+    },
+    {
+      _id: "34",
+      name: "Ernakulam Industrial Estate",
+      location: { district: "Ernakulam", state: "Kerala" },
+      type: "industrial",
+      priority: "high",
+      currentDemand: 5000,
+      projectedDemand2030: 8000,
+      projectedDemand2050: 12000,
+      industries: ["Food Processing", "Shipping"],
+      transportConnectivity: 78
+    },
+    {
+      _id: "35",
+      name: "Shillong Residential Block",
+      location: { district: "Shillong", state: "Meghalaya" },
+      type: "residential",
+      priority: "low",
+      currentDemand: 1000,
+      projectedDemand2030: 2000,
+      projectedDemand2050: 3000,
+      industries: ["Housing"],
+      transportConnectivity: 50
+    },
+    {
+      _id: "36",
+      name: "Imphal Export Terminal",
+      location: { district: "Imphal", state: "Manipur" },
+      type: "export",
+      priority: "medium",
+      currentDemand: 1500,
+      projectedDemand2030: 2500,
+      projectedDemand2050: 4000,
+      industries: ["Handicrafts"],
+      transportConnectivity: 52
+    },
+    {
+      _id: "37",
+      name: "Aizawl Industrial Estate",
+      location: { district: "Aizawl", state: "Mizoram" },
+      type: "industrial",
+      priority: "high",
+      currentDemand: 2000,
+      projectedDemand2030: 3500,
+      projectedDemand2050: 5000,
+      industries: ["Handicrafts"],
+      transportConnectivity: 54
+    },
+    {
+      _id: "38",
+      name: "Kohima Residential Area",
+      location: { district: "Kohima", state: "Nagaland" },
+      type: "residential",
+      priority: "low",
+      currentDemand: 1000,
+      projectedDemand2030: 2000,
+      projectedDemand2050: 3000,
+      industries: ["Housing"],
+      transportConnectivity: 48
+    },
+    {
+      _id: "39",
+      name: "Gangtok Export Cluster",
+      location: { district: "Gangtok", state: "Sikkim" },
+      type: "export",
+      priority: "medium",
+      currentDemand: 1200,
+      projectedDemand2030: 2000,
+      projectedDemand2050: 3000,
+      industries: ["Tourism"],
+      transportConnectivity: 49
+    },
+    {
+      _id: "40",
+      name: "Tripura Industrial Estate",
+      location: { district: "Agartala", state: "Tripura" },
+      type: "industrial",
+      priority: "high",
+      currentDemand: 2500,
+      projectedDemand2030: 4000,
+      projectedDemand2050: 6000,
+      industries: ["Handicrafts", "Food Processing"],
+      transportConnectivity: 53
+    }
+  ];
+
+  const demandClustersApi = useQuery(api.demandClusters.getDemandClusters, {
     type: selectedType as any || undefined,
     state: selectedState || undefined,
     priority: selectedPriority as any || undefined,
   });
+
+  // Fallback to dummy data if API returns no clusters
+  const demandClusters = demandClustersApi && demandClustersApi.length > 0
+    ? demandClustersApi
+    : dummyClusters.filter(cluster =>
+        (!selectedType || cluster.type === selectedType) &&
+        (!selectedState || cluster.location.state === selectedState) &&
+        (!selectedPriority || cluster.priority === selectedPriority)
+      );
 
   const demandStats = useQuery(api.demandClusters.getDemandStats);
 
@@ -24,7 +518,7 @@ export function DemandAnalysis() {
   ];
 
   return (
-    <div className="p-6">
+  <div className="min-h-screen p-6 bg-gradient-to-r from-[#5fa708] via-[#228B22] to-[#0b3d08]">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Hydrogen Demand Analysis</h2>
       </div>

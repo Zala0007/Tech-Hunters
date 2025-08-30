@@ -58,7 +58,7 @@ export const seedDatabase = mutation({
     const demandClusters = [
       {
         name: "Mumbai Industrial Complex",
-        type: "industrial",
+        type: "industrial" as const,
         location: {
           lat: 19.0760,
           lng: 72.8777,
@@ -71,11 +71,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 400000,
         industries: ["Steel", "Petrochemicals", "Refining"],
         transportConnectivity: 90,
-        priority: "high",
+        priority: "high" as const,
       },
       {
         name: "Delhi NCR Transport Hub",
-        type: "transport",
+        type: "transport" as const,
         location: {
           lat: 28.7041,
           lng: 77.1025,
@@ -88,11 +88,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 350000,
         industries: ["Public Transport", "Logistics", "Aviation"],
         transportConnectivity: 95,
-        priority: "high",
+        priority: "high" as const,
       },
       {
         name: "Ahmedabad Industrial Zone",
-        type: "industrial",
+        type: "industrial" as const,
         location: {
           lat: 23.0225,
           lng: 72.5714,
@@ -105,11 +105,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 380000,
         industries: ["Chemicals", "Textiles", "Pharmaceuticals"],
         transportConnectivity: 85,
-        priority: "high",
+        priority: "high" as const,
       },
       {
         name: "Chennai Port Complex",
-        type: "export",
+        type: "export" as const,
         location: {
           lat: 13.0827,
           lng: 80.2707,
@@ -122,11 +122,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 280000,
         industries: ["Shipping", "Export", "Port Operations"],
         transportConnectivity: 92,
-        priority: "high",
+        priority: "high" as const,
       },
       {
         name: "Bangalore Tech District",
-        type: "residential",
+        type: "residential" as const,
         location: {
           lat: 12.9716,
           lng: 77.5946,
@@ -139,11 +139,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 180000,
         industries: ["IT Services", "Data Centers", "Commercial"],
         transportConnectivity: 88,
-        priority: "medium",
+        priority: "medium" as const,
       },
       {
         name: "Kolkata Steel Belt",
-        type: "industrial",
+        type: "industrial" as const,
         location: {
           lat: 22.5726,
           lng: 88.3639,
@@ -156,11 +156,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 450000,
         industries: ["Steel", "Heavy Engineering", "Mining"],
         transportConnectivity: 78,
-        priority: "high",
+        priority: "high" as const,
       },
       {
         name: "Pune Automotive Cluster",
-        type: "industrial",
+        type: "industrial" as const,
         location: {
           lat: 18.5204,
           lng: 73.8567,
@@ -173,11 +173,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 290000,
         industries: ["Automotive", "Manufacturing", "Engineering"],
         transportConnectivity: 82,
-        priority: "medium",
+        priority: "medium" as const,
       },
       {
         name: "Hyderabad Pharma Valley",
-        type: "industrial",
+        type: "industrial" as const,
         location: {
           lat: 17.3850,
           lng: 78.4867,
@@ -190,11 +190,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 240000,
         industries: ["Pharmaceuticals", "Biotechnology", "Chemicals"],
         transportConnectivity: 80,
-        priority: "medium",
+        priority: "medium" as const,
       },
       {
         name: "Jaipur Transport Network",
-        type: "transport",
+        type: "transport" as const,
         location: {
           lat: 26.9124,
           lng: 75.7873,
@@ -207,11 +207,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 210000,
         industries: ["Public Transport", "Tourism", "Logistics"],
         transportConnectivity: 75,
-        priority: "medium",
+        priority: "medium" as const,
       },
       {
         name: "Kochi Port and Shipping",
-        type: "export",
+        type: "export" as const,
         location: {
           lat: 9.9312,
           lng: 76.2673,
@@ -224,11 +224,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 230000,
         industries: ["Shipping", "Spices Export", "Tourism"],
         transportConnectivity: 85,
-        priority: "medium",
+        priority: "medium" as const,
       },
       {
         name: "Lucknow Urban Zone",
-        type: "residential",
+        type: "residential" as const,
         location: {
           lat: 26.8467,
           lng: 80.9462,
@@ -241,11 +241,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 165000,
         industries: ["Government", "Education", "Healthcare"],
         transportConnectivity: 70,
-        priority: "low",
+        priority: "low" as const,
       },
       {
         name: "Visakhapatnam Steel Complex",
-        type: "industrial",
+        type: "industrial" as const,
         location: {
           lat: 17.6868,
           lng: 83.2185,
@@ -258,11 +258,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 420000,
         industries: ["Steel", "Petrochemicals", "Fertilizers"],
         transportConnectivity: 88,
-        priority: "high",
+        priority: "high" as const,
       },
       {
         name: "Bhubaneswar Government Hub",
-        type: "residential",
+        type: "residential" as const,
         location: {
           lat: 20.2961,
           lng: 85.8245,
@@ -275,11 +275,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 148000,
         industries: ["Government", "IT Services", "Education"],
         transportConnectivity: 72,
-        priority: "low",
+        priority: "low" as const,
       },
       {
         name: "Indore Commercial District",
-        type: "residential",
+        type: "residential" as const,
         location: {
           lat: 22.7196,
           lng: 75.8577,
@@ -292,11 +292,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 195000,
         industries: ["Trade", "Finance", "Textiles"],
         transportConnectivity: 76,
-        priority: "medium",
+        priority: "medium" as const,
       },
       {
         name: "Chandigarh Transport System",
-        type: "transport",
+        type: "transport" as const,
         location: {
           lat: 30.7333,
           lng: 76.7794,
@@ -309,11 +309,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 155000,
         industries: ["Public Transport", "Government", "Education"],
         transportConnectivity: 78,
-        priority: "low",
+        priority: "low" as const,
       },
       {
         name: "Coimbatore Textile Hub",
-        type: "industrial",
+        type: "industrial" as const,
         location: {
           lat: 11.0168,
           lng: 76.9558,
@@ -326,11 +326,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 270000,
         industries: ["Textiles", "Engineering", "Automotive Parts"],
         transportConnectivity: 79,
-        priority: "medium",
+        priority: "medium" as const,
       },
       {
         name: "Guwahati Northeast Gateway",
-        type: "transport",
+        type: "transport" as const,
         location: {
           lat: 26.1445,
           lng: 91.7362,
@@ -343,11 +343,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 130000,
         industries: ["Logistics", "Oil Refining", "Tea Processing"],
         transportConnectivity: 65,
-        priority: "low",
+        priority: "low" as const,
       },
       {
         name: "Surat Diamond and Textile Zone",
-        type: "industrial",
+        type: "industrial" as const,
         location: {
           lat: 21.1702,
           lng: 72.8311,
@@ -360,11 +360,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 340000,
         industries: ["Diamonds", "Textiles", "Chemicals"],
         transportConnectivity: 84,
-        priority: "high",
+        priority: "high" as const,
       },
       {
         name: "Kandla Port Export Terminal",
-        type: "export",
+        type: "export" as const,
         location: {
           lat: 23.0330,
           lng: 70.2167,
@@ -377,11 +377,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 250000,
         industries: ["Port Operations", "Chemicals Export", "Petroleum"],
         transportConnectivity: 90,
-        priority: "high",
+        priority: "high" as const,
       },
       {
         name: "Nashik Industrial Estate",
-        type: "industrial",
+        type: "industrial" as const,
         location: {
           lat: 19.9975,
           lng: 73.7898,
@@ -394,11 +394,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 205000,
         industries: ["Automotive", "Wine", "Engineering"],
         transportConnectivity: 77,
-        priority: "low",
+        priority: "low" as const,
       },
       {
         name: "Thiruvananthapuram IT Corridor",
-        type: "residential",
+        type: "residential" as const,
         location: {
           lat: 8.5241,
           lng: 76.9366,
@@ -411,11 +411,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 140000,
         industries: ["IT Services", "Space Technology", "Tourism"],
         transportConnectivity: 73,
-        priority: "low",
+        priority: "low" as const,
       },
       {
         name: "Rourkela Steel City",
-        type: "industrial",
+        type: "industrial" as const,
         location: {
           lat: 22.2604,
           lng: 84.8536,
@@ -428,11 +428,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 410000,
         industries: ["Steel", "Heavy Engineering", "Mining"],
         transportConnectivity: 75,
-        priority: "high",
+        priority: "high" as const,
       },
       {
         name: "Mangalore Port Complex",
-        type: "export",
+        type: "export" as const,
         location: {
           lat: 12.9141,
           lng: 74.8560,
@@ -445,11 +445,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 225000,
         industries: ["Port Operations", "Petrochemicals", "Coffee Export"],
         transportConnectivity: 86,
-        priority: "medium",
+        priority: "medium" as const,
       },
       {
         name: "Rajkot Engineering Hub",
-        type: "industrial",
+        type: "industrial" as const,
         location: {
           lat: 22.3039,
           lng: 70.8022,
@@ -462,11 +462,11 @@ export const seedDatabase = mutation({
         projectedDemand2050: 275000,
         industries: ["Engineering", "Automotive Parts", "Machine Tools"],
         transportConnectivity: 81,
-        priority: "medium",
+        priority: "medium" as const,
       },
       {
         name: "Agra Tourism and Heritage Zone",
-        type: "residential",
+        type: "residential" as const,
         location: {
           lat: 27.1767,
           lng: 78.0081,
@@ -479,14 +479,22 @@ export const seedDatabase = mutation({
         projectedDemand2050: 175000,
         industries: ["Tourism", "Handicrafts", "Leather"],
         transportConnectivity: 74,
-        priority: "low",
+        priority: "low" as const,
       }
     ];
 
     // Insert all demand clusters
     for (const cluster of demandClusters) {
       await ctx.db.insert("demandClusters", {
-        ...cluster,
+        name: cluster.name,
+        type: cluster.type as "industrial" | "residential" | "transport" | "export",
+        location: cluster.location,
+        currentDemand: cluster.currentDemand,
+        projectedDemand2030: cluster.projectedDemand2030,
+        projectedDemand2050: cluster.projectedDemand2050,
+        industries: cluster.industries,
+        transportConnectivity: cluster.transportConnectivity,
+        priority: cluster.priority as "low" | "medium" | "high",
         createdAt: now,
         updatedAt: now,
       });

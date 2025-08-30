@@ -1,24 +1,41 @@
 import { useState } from "react";
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import {
+  transportInfraData,
+  transportStatsData,
+  strategicCorridorsData
+} from "../lib/transportData";
 
 export function TransportAnalysis() {
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedState, setSelectedState] = useState<string>("");
 
-  const transportInfra = useQuery(api.transport.getTransportInfra, {
-    type: selectedType as any || undefined,
-    state: selectedState || undefined,
-  });
+  // Filter infrastructure data by selected type and state
+  const transportInfra = transportInfraData.filter(
+    infra =>
+      (selectedType === "" || infra.type === selectedType) &&
+      (selectedState === "" || infra.location.state === selectedState)
+  );
 
-  const transportStats = useQuery(api.transport.getTransportStats, {
-    state: selectedState || undefined,
-  });
+  // Filter stats by selection
+  const filteredStats = {
+    total: transportInfra.length,
+    averageConnectivity:
+      transportInfra.length > 0
+        ? transportInfra.reduce((sum, infra) => sum + infra.connectivity, 0) / transportInfra.length
+        : 0,
+    strategicAssets: transportInfra.filter(infra => infra.strategicImportance > 85).length,
+    totalCapacity: transportInfra.reduce((sum, infra) => sum + infra.capacity, 0),
+    byType: {
+      highway: transportInfra.filter(infra => infra.type === "highway").length,
+      railway: transportInfra.filter(infra => infra.type === "railway").length,
+      port: transportInfra.filter(infra => infra.type === "port").length,
+      airport: transportInfra.filter(infra => infra.type === "airport").length,
+      pipeline: transportInfra.filter(infra => infra.type === "pipeline").length,
+    },
+  };
 
-  const strategicCorridors = useQuery(api.transport.getStrategicCorridors, {
-    minImportance: 70,
-    state: selectedState || undefined,
-  });
+  // Strategic corridors (static for now)
+  const strategicCorridors = strategicCorridorsData;
 
   const indianStates = [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat",
@@ -29,7 +46,7 @@ export function TransportAnalysis() {
   ];
 
   return (
-    <div className="p-6">
+    <div className="min-h-screen p-6 bg-gradient-to-r from-[#5fa708] via-[#228B22] to-[#0b3d08]">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Transport Infrastructure Analysis</h2>
       </div>
@@ -41,7 +58,7 @@ export function TransportAnalysis() {
             <div className="text-3xl mr-4">🚛</div>
             <div>
               <p className="text-sm font-medium text-gray-600">Total Infrastructure</p>
-              <p className="text-2xl font-bold text-gray-900">{transportStats?.total || 0}</p>
+              <p className="text-2xl font-bold text-gray-900">{filteredStats.total}</p>
             </div>
           </div>
         </div>
@@ -52,7 +69,7 @@ export function TransportAnalysis() {
             <div>
               <p className="text-sm font-medium text-gray-600">Avg Connectivity</p>
               <p className="text-2xl font-bold text-gray-900">
-                {transportStats?.averageConnectivity?.toFixed(0) || 0}
+                {filteredStats.averageConnectivity.toFixed(0)}
               </p>
             </div>
           </div>
@@ -63,7 +80,7 @@ export function TransportAnalysis() {
             <div className="text-3xl mr-4">⭐</div>
             <div>
               <p className="text-sm font-medium text-gray-600">Strategic Assets</p>
-              <p className="text-2xl font-bold text-gray-900">{transportStats?.strategicAssets || 0}</p>
+              <p className="text-2xl font-bold text-gray-900">{filteredStats.strategicAssets}</p>
             </div>
           </div>
         </div>
@@ -74,7 +91,7 @@ export function TransportAnalysis() {
             <div>
               <p className="text-sm font-medium text-gray-600">Total Capacity</p>
               <p className="text-2xl font-bold text-gray-900">
-                {transportStats ? (transportStats.totalCapacity / 1000000).toFixed(1) : 0}M
+                {(filteredStats.totalCapacity / 1000000).toFixed(1)}M
               </p>
             </div>
           </div>
@@ -116,70 +133,68 @@ export function TransportAnalysis() {
           {/* Infrastructure Distribution */}
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-lg font-semibold mb-4">Infrastructure by Type</h3>
-            {transportStats && (
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">🛣️ Highways</span>
-                  <div className="flex items-center">
-                    <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                      <div 
-                        className="bg-blue-600 h-2 rounded-full" 
-                        style={{ width: `${(transportStats.byType.highway / transportStats.total) * 100}%` }}
-                      ></div>
-                    </div>
-                    <span className="text-sm font-medium">{transportStats.byType.highway}</span>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">🛣️ Highways</span>
+                <div className="flex items-center">
+                  <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full"
+                      style={{ width: `${filteredStats.total > 0 ? (filteredStats.byType.highway / filteredStats.total) * 100 : 0}%` }}
+                    ></div>
                   </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">🚂 Railways</span>
-                  <div className="flex items-center">
-                    <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                      <div 
-                        className="bg-green-600 h-2 rounded-full" 
-                        style={{ width: `${(transportStats.byType.railway / transportStats.total) * 100}%` }}
-                      ></div>
-                    </div>
-                    <span className="text-sm font-medium">{transportStats.byType.railway}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">🚢 Ports</span>
-                  <div className="flex items-center">
-                    <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                      <div 
-                        className="bg-yellow-600 h-2 rounded-full" 
-                        style={{ width: `${(transportStats.byType.port / transportStats.total) * 100}%` }}
-                      ></div>
-                    </div>
-                    <span className="text-sm font-medium">{transportStats.byType.port}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">✈️ Airports</span>
-                  <div className="flex items-center">
-                    <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                      <div 
-                        className="bg-purple-600 h-2 rounded-full" 
-                        style={{ width: `${(transportStats.byType.airport / transportStats.total) * 100}%` }}
-                      ></div>
-                    </div>
-                    <span className="text-sm font-medium">{transportStats.byType.airport}</span>
-                  </div>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">🔧 Pipelines</span>
-                  <div className="flex items-center">
-                    <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
-                      <div 
-                        className="bg-red-600 h-2 rounded-full" 
-                        style={{ width: `${(transportStats.byType.pipeline / transportStats.total) * 100}%` }}
-                      ></div>
-                    </div>
-                    <span className="text-sm font-medium">{transportStats.byType.pipeline}</span>
-                  </div>
+                  <span className="text-sm font-medium">{filteredStats.byType.highway}</span>
                 </div>
               </div>
-            )}
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">🚂 Railways</span>
+                <div className="flex items-center">
+                  <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                    <div
+                      className="bg-green-600 h-2 rounded-full"
+                      style={{ width: `${filteredStats.total > 0 ? (filteredStats.byType.railway / filteredStats.total) * 100 : 0}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-sm font-medium">{filteredStats.byType.railway}</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">🚢 Ports</span>
+                <div className="flex items-center">
+                  <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                    <div
+                      className="bg-yellow-600 h-2 rounded-full"
+                      style={{ width: `${filteredStats.total > 0 ? (filteredStats.byType.port / filteredStats.total) * 100 : 0}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-sm font-medium">{filteredStats.byType.port}</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">✈️ Airports</span>
+                <div className="flex items-center">
+                  <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                    <div
+                      className="bg-purple-600 h-2 rounded-full"
+                      style={{ width: `${filteredStats.total > 0 ? (filteredStats.byType.airport / filteredStats.total) * 100 : 0}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-sm font-medium">{filteredStats.byType.airport}</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">🔧 Pipelines</span>
+                <div className="flex items-center">
+                  <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                    <div
+                      className="bg-red-600 h-2 rounded-full"
+                      style={{ width: `${filteredStats.total > 0 ? (filteredStats.byType.pipeline / filteredStats.total) * 100 : 0}%` }}
+                    ></div>
+                  </div>
+                  <span className="text-sm font-medium">{filteredStats.byType.pipeline}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

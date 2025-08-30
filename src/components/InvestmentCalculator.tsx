@@ -40,7 +40,7 @@ export function InvestmentCalculator() {
   const roi = calculateROI();
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-gradient-to-r from-[#5fa708] via-[#228B22] to-[#0b3d08]">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Investment Calculator</h2>
       </div>

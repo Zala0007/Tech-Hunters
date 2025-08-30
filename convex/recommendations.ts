@@ -1,3 +1,13 @@
+// Delete a site recommendation
+export const deleteRecommendation = mutation({
+  args: {
+    id: v.id("siteRecommendations"),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.id);
+    return true;
+  },
+});
 import { query, mutation, action, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthUserId } from "@convex-dev/auth/server";
