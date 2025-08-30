@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🚀 H2 Infrastructure Platform
 
 Modern full-stack application for hydrogen infrastructure planning and analysis in India. Built with React + TypeScript frontend and Express + MongoDB backend.
@@ -19,6 +20,30 @@ echo "MONGODB_URI=mongodb://localhost:27017/h2db" > .env
 echo "JWT_SECRET=your-secret-key" >> .env
 echo "PORT=4000" >> .env
 
+=======
+
+# 🚀 GH2 Infrastructure Platform
+
+Modern full-stack application for hydrogen infrastructure planning and analysis in India. Built with React + TypeScript frontend and Express + MongoDB backend.
+
+## ⚡ Quick Start
+
+**Prerequisites:** Node.js 18+, MongoDB
+
+```bash
+# Clone and install
+git clone <repo-url>
+cd H2
+npm install
+
+# Backend setup
+cd backend
+npm install
+echo "MONGODB_URI=mongodb://localhost:27017/h2db" > .env
+echo "JWT_SECRET=your-secret-key" >> .env
+echo "PORT=4000" >> .env
+
+>>>>>>> 95e77656ae03c31152ef84238ec3f6879b4536fc
 # Start development servers
 npm run dev          # Backend (port 4000)
 cd .. && npm run dev # Frontend (port 5173)
@@ -99,4 +124,8 @@ npm run build        # Production build
 
 ---
 
+<<<<<<< HEAD
 **Tech Stack:** React, TypeScript, Express, MongoDB, JWT, Vite
+=======
+**Tech Stack:** React, TypeScript, Express, MongoDB, JWT, Vite
+>>>>>>> 95e77656ae03c31152ef84238ec3f6879b4536fc
