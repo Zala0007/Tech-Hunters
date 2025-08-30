@@ -8,9 +8,9 @@ export function SignInForm() {
   const [submitting, setSubmitting] = useState(false);
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-md mx-auto px-4 sm:px-6">
       <form
-        className="flex flex-col gap-form-field"
+        className="flex flex-col gap-4 sm:gap-5"
           onSubmit={async (e) => {
           e.preventDefault();
           setSubmitting(true);
@@ -32,29 +32,33 @@ export function SignInForm() {
         }}
       >
         <input
-          className="auth-input-field"
+          className="auth-input-field text-sm sm:text-base"
           type="email"
           name="email"
           placeholder="Email"
           required
         />
         <input
-          className="auth-input-field"
+          className="auth-input-field text-sm sm:text-base"
           type="password"
           name="password"
           placeholder="Password"
           required
         />
-        <button className="auth-button" type="submit" disabled={submitting}>
+        <button 
+          className="auth-button w-full sm:w-auto sm:min-w-[200px] md:w-full" 
+          type="submit" 
+          disabled={submitting}
+        >
           {flow === "signIn" ? "Sign in" : "Sign up"}
         </button>
-        <div className="text-center text-sm text-secondary">
+        <div className="text-center text-sm sm:text-base text-secondary">
           <span>
             {flow === "signIn" ? "Don't have an account? " : "Already have an account? "}
           </span>
           <button
             type="button"
-            className="text-primary hover:text-primary-hover hover:underline font-medium cursor-pointer"
+            className="text-primary hover:text-primary-hover hover:underline font-medium cursor-pointer text-sm sm:text-base transition-colors"
             onClick={() => setFlow(flow === "signIn" ? "signUp" : "signIn")}
           >
             {flow === "signIn" ? "Sign up instead" : "Sign in instead"}
@@ -67,7 +71,7 @@ export function SignInForm() {
         <hr className="my-4 grow border-gray-200" />
       </div>
       <button
-        className="auth-button"
+        className="auth-button w-full sm:w-auto sm:min-w-[200px] md:w-full"
         onClick={async () => {
           try { await api.auth.signin({ anonymous: true }); window.location.reload(); } catch { }
         }}

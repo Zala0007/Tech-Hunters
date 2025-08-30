@@ -4,7 +4,7 @@ const router = express.Router();
 const siteController = require('../controllers/siteController');
 
 router.get('/', siteController.getSites);
-router.post('/', siteController.addSite);
+router.post('/add', siteController.addSite);
 router.get('/recommendations', siteController.recommendSites);
 
 module.exports = router;
