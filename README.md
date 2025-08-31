@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# 🚀 H2 Infrastructure Platform
+# 🚀 GH2 Infrastructure & Mapping Platform
 
 Modern full-stack application for hydrogen infrastructure planning and analysis in India. Built with React + TypeScript frontend and Express + MongoDB backend.
 
